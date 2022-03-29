@@ -45,7 +45,8 @@ public class LoginLocationFixListeners  implements Listener{
 				JoinBlock.breakNaturally();
 			}
 			JoinPlayer.sendMessage(ChatColor.GREEN+"你在登录时卡在了地狱门，现已修正，如果登录后卡在别人禁止移动的领地，请使用命令/res unstuck跳出这块领地，其他问题在服务器交流贴或群中反馈。");
-		}else if(UpType.isOccluding()||UpType.equals(Material.STATIONARY_LAVA)){
+			
+		} else if(UpType.isOccluding()||UpType.equals(Material.STATIONARY_LAVA)){
 			int MaxHeight = JoinPlayer.getWorld().getMaxHeight()-2;
 			for(int i=60;i<=MaxHeight;i++){
 				JoinLocation.setY(i);
