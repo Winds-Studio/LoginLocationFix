@@ -1,0 +1,5 @@
+name: LoginLocationFix
+version: '${version}'
+main: net.meano.loginlocationfix.LoginLocationFix
+api-version: 1.18.1
+author: Meano
