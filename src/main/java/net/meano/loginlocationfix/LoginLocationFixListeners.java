@@ -13,8 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class LoginLocationFixListeners implements Listener {
     LoginLocationFix LLFM;
 
-    LoginLocationFixListeners(LoginLocationFix GetPlugin) {
-        LLFM = GetPlugin;
+    LoginLocationFixListeners(LoginLocationFix Plugin) {
+        LLFM = Plugin;
     }
 
     @EventHandler
@@ -45,7 +45,7 @@ public class LoginLocationFixListeners implements Listener {
                 JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                 JoinBlock.breakNaturally();
             }
-            JoinPlayer.sendMessage(ChatColor.GREEN + "你在登录时卡在了地狱门，现已修正，如果登录后卡在别人禁止移动的领地，请使用命令/res unstuck跳出这块领地，其他问题在服务器交流贴或群中反馈。");
+            JoinPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', LLFM.getConfig().getString("Portal.Message")));
 
         } else if (UpType.isOccluding() || UpType.equals(Material.LAVA)) {
             int MaxHeight = JoinPlayer.getWorld().getMaxHeight() - 2;
@@ -59,12 +59,12 @@ public class LoginLocationFixListeners implements Listener {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
                     JoinPlayer.teleport(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    JoinPlayer.sendMessage(ChatColor.GREEN + "你被埋住了，坐标已修正，下次下线之前请小心！");
+                    JoinPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', LLFM.getConfig().getString("Underground.Message1")));
                     break;
                 }
                 if (i == MaxHeight) {
                     JoinPlayer.teleport(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    JoinPlayer.sendMessage(ChatColor.GREEN + "你被埋住了，坐标无法修正，只好送你去了最高点，自求多福吧少年~");
+                    JoinPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', LLFM.getConfig().getString("Underground.Message2")));
                 }
             }
         }
