@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'net.meano'
-version = '0.3'
+version = '0.5'
 
 repositories {
     mavenCentral()
