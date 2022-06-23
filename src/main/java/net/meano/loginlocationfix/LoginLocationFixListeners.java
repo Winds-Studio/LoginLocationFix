@@ -23,7 +23,8 @@ public class LoginLocationFixListeners implements Listener {
         Location JoinLocation = JoinPlayer.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5);
         JoinPlayer.teleport(JoinLocation);
         Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
-        if (JoinLocation.getBlock().getType().equals(Material.NETHER_PORTAL) || JoinLocation.getBlock().getRelative(BlockFace.UP).getType().equals(Material.NETHER_PORTAL)) {
+        if (LLFM.getConfig().getBoolean("Portal.Enable")) {
+            if (JoinLocation.getBlock().getType().equals(Material.NETHER_PORTAL) || JoinLocation.getBlock().getRelative(BlockFace.UP).getType().equals(Material.NETHER_PORTAL)) {
             Block JoinBlock = JoinLocation.getBlock();
             if (JoinBlock.getRelative(BlockFace.WEST).getType().equals(Material.AIR) && JoinBlock.getRelative(BlockFace.WEST).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
                 JoinPlayer.teleport(JoinBlock.getRelative(BlockFace.WEST).getLocation().add(0.5, 0.1, 0.5));
@@ -47,7 +48,8 @@ public class LoginLocationFixListeners implements Listener {
             }
             JoinPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', LLFM.getConfig().getString("Portal.Message")));
 
-        } else if (UpType.isOccluding() || UpType.equals(Material.LAVA)) {
+        }} else if (LLFM.getConfig().getBoolean("Underground.Enable")) {
+            if (UpType.isOccluding() || UpType.equals(Material.LAVA)){
             int MaxHeight = JoinPlayer.getWorld().getMaxHeight() - 2;
             for (int i = 60; i <= MaxHeight; i++) {
                 JoinLocation.setY(i);
@@ -67,6 +69,6 @@ public class LoginLocationFixListeners implements Listener {
                     JoinPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', LLFM.getConfig().getString("Underground.Message2")));
                 }
             }
-        }
+        } }
     }
 }
