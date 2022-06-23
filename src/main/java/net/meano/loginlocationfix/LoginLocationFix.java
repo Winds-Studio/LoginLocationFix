@@ -9,7 +9,7 @@ public final class LoginLocationFix extends JavaPlugin {
     @Override
     public void onEnable() {
         //Log开始记录
-        getLogger().info("LoginLocationFix 0.5,by Meano & Dreeam. Loading.");
+        getLogger().info("LoginLocationFix 0.5,by Meano & Dreeam, Loaded.");
         PluginManager PM = Bukkit.getServer().getPluginManager();
         PM.registerEvents(new LoginLocationFixListeners(this), this);
     }
