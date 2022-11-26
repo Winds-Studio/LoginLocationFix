@@ -2,4 +2,4 @@ name: LoginLocationFix
 version: '${version}'
 main: net.meano.loginlocationfix.LoginLocationFix
 api-version: 1.19
-author: Meano, Dreeam
+authors: [ Meano, Dreeam ]
