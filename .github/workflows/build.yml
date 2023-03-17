@@ -25,4 +25,4 @@ jobs:
           automatic_release_tag: "0.8"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "build/libs"
-          prerelease: true
+          prerelease: false
