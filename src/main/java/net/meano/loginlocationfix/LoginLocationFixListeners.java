@@ -45,7 +45,7 @@ public class LoginLocationFixListeners implements Listener {
                     JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                     JoinBlock.breakNaturally();
                 }
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("portal.Message")));
+                player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("portal.Message"))));
 
             }
         } else if (plugin.getConfig().getBoolean("underground.Enabled")) {
@@ -60,17 +60,17 @@ public class LoginLocationFixListeners implements Listener {
                             JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                         }
                         player.teleport(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message1")));
+                        player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message1"))));
                         break;
                     }
                     if (i == MaxHeight) {
                         player.teleport(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message2")));
+                        player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message2"))));
                     }
                 }
             }
         } else if (plugin.getConfig().getBoolean("midAir.Enabled")) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "You are in MidAir now."));
+            player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', "You are in MidAir now.")));
 //            if ((JoinLocation - MaxHeight) > 2)
         }
     }
