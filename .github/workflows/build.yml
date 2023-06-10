@@ -21,8 +21,8 @@ jobs:
       - name: Release Artifacts
         uses: marvinpinto/action-automatic-releases@latest
         with:
-          title: "LoginLocationFix v0.9"
-          automatic_release_tag: "0.9"
+          title: "LoginLocationFix v0.10"
+          automatic_release_tag: "0.10"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "build/libs"
           prerelease: false
