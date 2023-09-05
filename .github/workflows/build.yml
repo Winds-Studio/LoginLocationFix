@@ -12,7 +12,7 @@ jobs:
       - name: Setup java
         uses: actions/setup-java@v3
         with:
-          java-version: 19
+          java-version: 17
           distribution: temurin
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -21,8 +21,8 @@ jobs:
       - name: Release Artifacts
         uses: marvinpinto/action-automatic-releases@latest
         with:
-          title: "LoginLocationFix v0.10"
-          automatic_release_tag: "0.10"
+          title: "LoginLocationFix v0.11"
+          automatic_release_tag: "0.11"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "build/libs"
           prerelease: false
