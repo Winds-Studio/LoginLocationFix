@@ -14,9 +14,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class LoginLocationFixListeners implements Listener {
     LoginLocationFix plugin;
     BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
-
+    private static Material material = Material.matchMaterial("PORTAL");
     LoginLocationFixListeners(LoginLocationFix Plugin) {
         plugin = Plugin;
+    }
+    static {
+        if (material == null) {
+            material = Material.matchMaterial("PORTAL_BLOCK");
+            if (material == null) {
+                material = Material.matchMaterial("NETHER_PORTAL");
+            }
+        }
     }
 
     @EventHandler
@@ -24,7 +32,7 @@ public class LoginLocationFixListeners implements Listener {
         Player player = event.getPlayer();
         Location JoinLocation = player.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5);
         if (plugin.getConfig().getBoolean("portal.Enabled")) {
-            if (!JoinLocation.getBlock().getType().equals(Material.NETHER_PORTAL) && !JoinLocation.getBlock().getRelative(BlockFace.UP).getType().equals(Material.NETHER_PORTAL)) {
+            if (!JoinLocation.getBlock().getType().equals(material) && !JoinLocation.getBlock().getRelative(BlockFace.UP).getType().equals(material)) {
                 return;
             }
             Block JoinBlock = JoinLocation.getBlock();
