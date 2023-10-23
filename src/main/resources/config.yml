@@ -10,4 +10,4 @@ underground:
   Message1: "&a你被埋住了, 坐标已修正, 下次下线之前请小心!"
   Message2: "&a你被埋住了, 坐标无法修正, 只好送你去了最高点, 自求多福吧少年~"
 midAir:
-  Enabled: true
+  Enabled: false

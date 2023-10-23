@@ -78,8 +78,9 @@ public class LoginLocationFixListeners implements Listener {
                 }
             }
         } else if (plugin.getConfig().getBoolean("midAir.Enabled")) {
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now."));
-//            if ((JoinLocation - MaxHeight) > 2)
+            if (!player.isOnGround()) { // TODO
+                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now."));
+            }
         }
     }
 }
