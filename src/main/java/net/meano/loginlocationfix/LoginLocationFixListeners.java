@@ -39,7 +39,7 @@ public class LoginLocationFixListeners implements Listener {
             boolean solved = false;
             for (BlockFace face : faces) {
                 if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    player.teleport(JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
+                    player.teleportAsync(JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
                     solved = true;
                     break;
                 }
@@ -66,12 +66,12 @@ public class LoginLocationFixListeners implements Listener {
                     if (JoinBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LAVA)) {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
-                    player.teleport(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
+                    player.teleportAsync(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
                     player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message1")));
                     break;
                 }
                 if (i == MaxHeight) {
-                    player.teleport(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
+                    player.teleportAsync(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
                     player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message2")));
                 }
             }
