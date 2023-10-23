@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Objects;
+
 public class LoginLocationFixListeners implements Listener {
     LoginLocationFix plugin;
     BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
@@ -48,7 +50,7 @@ public class LoginLocationFixListeners implements Listener {
                 JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                 JoinBlock.breakNaturally();
             }
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("portal.Message")));
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("portal.Message"))));
         } else if (plugin.getConfig().getBoolean("underground.Enabled")) {
             Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
             World world = player.getWorld();
@@ -67,12 +69,12 @@ public class LoginLocationFixListeners implements Listener {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
                     player.teleportAsync(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message1")));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("underground.Message1"))));
                     break;
                 }
                 if (i == MaxHeight) {
                     player.teleportAsync(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message2")));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("underground.Message2"))));
                 }
             }
         } else if (plugin.getConfig().getBoolean("midAir.Enabled")) {
