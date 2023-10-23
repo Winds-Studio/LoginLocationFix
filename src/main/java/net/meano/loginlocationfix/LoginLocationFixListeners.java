@@ -1,6 +1,6 @@
 package net.meano.loginlocationfix;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -48,7 +48,7 @@ public class LoginLocationFixListeners implements Listener {
                 JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                 JoinBlock.breakNaturally();
             }
-            player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("portal.Message"))));
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("portal.Message")));
         } else if (plugin.getConfig().getBoolean("underground.Enabled")) {
             Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
             World world = player.getWorld();
@@ -67,16 +67,16 @@ public class LoginLocationFixListeners implements Listener {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
                     player.teleport(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message1"))));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message1")));
                     break;
                 }
                 if (i == MaxHeight) {
                     player.teleport(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("underground.Message2"))));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("underground.Message2")));
                 }
             }
         } else if (plugin.getConfig().getBoolean("midAir.Enabled")) {
-            player.sendMessage(net.kyori.adventure.text.Component.text(ChatColor.translateAlternateColorCodes('&', "You are in MidAir now.")));
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now."));
 //            if ((JoinLocation - MaxHeight) > 2)
         }
     }
