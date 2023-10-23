@@ -1,7 +1,0 @@
-name: LoginLocationFix
-version: '${version}'
-main: net.meano.loginlocationfix.LoginLocationFix
-description: Fix player location when they login, prevent stuck in blocks
-api-version: '1.20'
-folia-supported: true
-authors: [ Meano, Dreeam ]
