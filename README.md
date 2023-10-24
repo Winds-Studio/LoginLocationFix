@@ -7,4 +7,4 @@ Fix the location of players when joining server.
 
 # Contact
 
-- 📫 Discord: `Dreeam#0851` | QQ: `2682173972`
+- 📫 Discord: `dreeam___` | QQ: `2682173972`
