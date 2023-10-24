@@ -1,6 +1,9 @@
 # LoginLocationFix
 
-Fix the location of players when they log in.
+Fix the location of players when joining server.
+
+- Paper 1.8.x ~ Latest Minecraft version (Currently 1.20.2)
+- Folia support
 
 # Contact
 
