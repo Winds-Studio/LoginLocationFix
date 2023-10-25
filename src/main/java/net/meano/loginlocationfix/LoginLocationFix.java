@@ -1,21 +1,20 @@
 package net.meano.loginlocationfix;
 
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LoginLocationFix extends JavaPlugin {
 
+    public static LoginLocationFix plugin;
+
     @Override
     public void onEnable() {
-        //Log开始记录
         saveDefaultConfig();
-        getLogger().info("LoginLocationFix 0.12-SNAPSHOT,by Meano & Dreeam, Loaded.");
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new LoginLocationFixListeners(this), this);
+        getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), this);
+        getLogger().info("LoginLocationFix 0.12,by Meano & Dreeam, Loaded.");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
     }
+
 }

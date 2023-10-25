@@ -14,12 +14,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Objects;
 
 public class LoginLocationFixListeners implements Listener {
-    LoginLocationFix plugin;
+
     BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
     private static Material materialPortal = Material.matchMaterial("PORTAL");
-    LoginLocationFixListeners(LoginLocationFix Plugin) {
-        plugin = Plugin;
-    }
+
     static {
         if (materialPortal == null) {
             materialPortal = Material.matchMaterial("PORTAL_BLOCK");
@@ -33,7 +31,7 @@ public class LoginLocationFixListeners implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Location JoinLocation = player.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5);
-        if (plugin.getConfig().getBoolean("portal.Enabled")) {
+        if (LoginLocationFix.plugin.getConfig().getBoolean("portal.enabled")) {
             if (!JoinLocation.getBlock().getType().equals(materialPortal) && !JoinLocation.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
                 return;
             }
@@ -50,8 +48,8 @@ public class LoginLocationFixListeners implements Listener {
                 JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                 JoinBlock.breakNaturally();
             }
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("portal.Message"))));
-        } else if (plugin.getConfig().getBoolean("underground.Enabled")) {
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.message"))));
+        } else if (LoginLocationFix.plugin.getConfig().getBoolean("underground.enabled")) {
             Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
             World world = player.getWorld();
             int MaxHeight = world.getMaxHeight();
@@ -69,15 +67,15 @@ public class LoginLocationFixListeners implements Listener {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
                     player.teleportAsync(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("underground.Message1"))));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message1"))));
                     break;
                 }
                 if (i == MaxHeight) {
                     player.teleportAsync(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(plugin.getConfig().getString("underground.Message2"))));
+                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message2"))));
                 }
             }
-        } else if (plugin.getConfig().getBoolean("midAir.Enabled")) {
+        } else if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.enabled")) {
             if (!player.isOnGround()) { // TODO
                 player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now."));
             }
