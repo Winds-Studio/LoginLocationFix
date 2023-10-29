@@ -8,6 +8,7 @@ public final class LoginLocationFix extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), this);
         getLogger().info("LoginLocationFix 0.12,by Meano & Dreeam, Loaded.");
