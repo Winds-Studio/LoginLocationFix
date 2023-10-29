@@ -51,13 +51,14 @@ public class LoginLocationFixListeners implements Listener {
             player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.message"))));
         } else if (LoginLocationFix.plugin.getConfig().getBoolean("underground.enabled")) {
             Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
+            if (!UpType.isOccluding() && !UpType.equals(Material.LAVA)) return;
             World world = player.getWorld();
             int MaxHeight = world.getMaxHeight();
             int MinHeight = world.getMinHeight();
             if (!UpType.isOccluding() && !UpType.equals(Material.LAVA)) {
                 return;
             }
-            for (int i = MinHeight; i <= MaxHeight; i++) {
+            for (int i = MinHeight; i <= MaxHeight; i++) { // Dreeam TODO: need from MaxHeight to MinHeight, to prevent teleport to cave underground
                 JoinLocation.setY(i);
                 Block JoinBlock = JoinLocation.getBlock();
                 if ((JoinBlock.getRelative(BlockFace.DOWN).getType().isBlock())
