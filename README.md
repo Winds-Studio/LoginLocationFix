@@ -1,9 +1,17 @@
 # LoginLocationFix
 
-Fix the location of players when joining server.
+Fix location of players when they join the server.
 
-- Paper 1.8.x ~ Latest Minecraft version (Currently 1.20.3)
-- Folia support
+## Features
+
+- Highly Optimized
+
+Compatibility
+
+- Support Java 8 and higher
+- Support 1.8.x - Latest Minecraft version (1.20.3)
+- Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
+- Folia Support
 
 # Contact
 
