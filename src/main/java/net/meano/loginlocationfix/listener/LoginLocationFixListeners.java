@@ -1,6 +1,7 @@
-package net.meano.loginlocationfix;
+package net.meano.loginlocationfix.listener;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.meano.loginlocationfix.LoginLocationFix;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,7 +40,7 @@ public class LoginLocationFixListeners implements Listener {
             boolean solved = false;
             for (BlockFace face : faces) {
                 if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    player.teleportAsync(JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
+                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
                     solved = true;
                     break;
                 }
@@ -48,7 +49,7 @@ public class LoginLocationFixListeners implements Listener {
                 JoinBlock.getRelative(BlockFace.UP).breakNaturally();
                 JoinBlock.breakNaturally();
             }
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.message"))));
+            LoginLocationFix.plugin.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.message"))));
         } else if (LoginLocationFix.plugin.getConfig().getBoolean("underground.enabled")) {
             Material UpType = JoinLocation.getBlock().getRelative(BlockFace.UP).getType();
             if (!UpType.isOccluding() && !UpType.equals(Material.LAVA)) return;
@@ -67,18 +68,18 @@ public class LoginLocationFixListeners implements Listener {
                     if (JoinBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LAVA)) {
                         JoinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
-                    player.teleportAsync(JoinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message1"))));
+                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getLocation().add(0.5, 0.1, 0.5));
+                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message1")))));
                     break;
                 }
                 if (i == MaxHeight) {
-                    player.teleportAsync(JoinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message2"))));
+                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getLocation().add(0.5, 1.1, 0.5));
+                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.message2")))));
                 }
             }
         } else if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.enabled")) {
             if (!player.isOnGround()) { // TODO
-                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now."));
+                LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now.")));
             }
         }
     }

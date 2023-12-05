@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "github.actor != 'dependabot[bot]'"
     steps:
       - uses: actions/checkout@main
       - name: Setup java
@@ -27,4 +28,4 @@ jobs:
           automatic_release_tag: "0.12"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "build/libs"
-          prerelease: true
+          prerelease: false

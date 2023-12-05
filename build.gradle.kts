@@ -1,17 +1,41 @@
 plugins {
-    id("java-library")
+    `java-library`
 }
 
 group = "net.meano"
-version = "0.12-SNAPSHOT"
+version = "0.12"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
+
+    // SpigotMC
+    maven {
+        name = "spigotmc-repo"
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    }
+
+    // PaperMC
+    maven {
+        name = "papermc-repo"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+
+    // FoliaLib
+    maven {
+        name = "devmart-other"
+        url = uri("https://nexuslite.gcnt.net/repos/other/")
+    }
 }
 
+val adventureVersion = "4.14.0"
+
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.3-R0.1-SNAPSHOT")
+
+    api("com.tcoded:FoliaLib:0.3.1")
+    api("net.kyori:adventure-platform-bukkit:4.3.1")
+    api("net.kyori:adventure-api:$adventureVersion")
+    api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
 }
 
 tasks.withType<JavaCompile> {
@@ -19,8 +43,8 @@ tasks.withType<JavaCompile> {
 }
 
 configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {
