@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
 }
 
 group = "net.meano"
@@ -47,8 +48,25 @@ configure<JavaPluginExtension> {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+tasks.build.configure {
+    dependsOn("shadowJar")
+}
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    archiveFileName = "${project.name}-${project.version}.jar"
+    exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
+    minimize {
+        exclude(dependency("com.tcoded.folialib:.*:.*"))
+    }
+    relocate("net.kyori", "net.meano.libs.kyori")
+    relocate("org.bstats", "net.meano.libs.bstats") // Dreeam TODO - Add bstats
+    relocate("com.tcoded.folialib", "net.meano.libs.folialib")
+}
+
 tasks {
     processResources {
-        expand("version" to project.version)
+        filesMatching("**/plugin.yml") {
+            expand("version" to project.version)
+        }
     }
 }
