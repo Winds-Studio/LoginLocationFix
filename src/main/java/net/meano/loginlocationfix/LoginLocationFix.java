@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class LoginLocationFix extends JavaPlugin {
 
     public static LoginLocationFix plugin;
+    private BukkitAudiences adventure;
     public final FoliaLib foliaLib = new FoliaLib(this);
 
     @Override
@@ -28,7 +29,6 @@ public final class LoginLocationFix extends JavaPlugin {
         }
     }
 
-    private BukkitAudiences adventure;
     public @NotNull BukkitAudiences adventure() {
         if (this.adventure == null) {
             throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
