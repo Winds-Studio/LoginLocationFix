@@ -31,7 +31,7 @@ repositories {
 val adventureVersion = "4.14.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
     api("com.tcoded:FoliaLib:0.3.1")
     api("net.kyori:adventure-platform-bukkit:4.3.1")
