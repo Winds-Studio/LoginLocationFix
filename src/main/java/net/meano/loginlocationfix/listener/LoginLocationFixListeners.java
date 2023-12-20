@@ -29,69 +29,71 @@ public class LoginLocationFixListeners implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location joinLoc = player.getLocation().getBlock().getLocation().add(0.5, 0.1, 0.5);
+        Location joinLoc = player.getLocation().getBlock().getLocation();
 
         if (LoginLocationFix.plugin.getConfig().getBoolean("portal.Enabled")) {
+            if (joinLoc.getBlock().getType().equals(materialPortal) || joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
 
-            if (!joinLoc.getBlock().getType().equals(materialPortal) && !joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
-                return;
-            }
+                Block JoinBlock = joinLoc.getBlock();
+                boolean solved = false;
 
-            Block JoinBlock = joinLoc.getBlock();
-            boolean solved = false;
-
-            for (BlockFace face : faces) {
-                if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
-                    solved = true;
-                    break;
+                for (BlockFace face : faces) {
+                    if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
+                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
+                        solved = true;
+                        break;
+                    }
                 }
+
+                if (!solved) {
+                    JoinBlock.getRelative(BlockFace.UP).breakNaturally();
+                    JoinBlock.breakNaturally();
+                }
+
+                LoginLocationFix.plugin.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.Message"))));
             }
+        }
 
-            if (!solved) {
-                JoinBlock.getRelative(BlockFace.UP).breakNaturally();
-                JoinBlock.breakNaturally();
-            }
-
-            LoginLocationFix.plugin.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.message"))));
-
-        } else if (LoginLocationFix.plugin.getConfig().getBoolean("underground.Enabled")) {
+        if (LoginLocationFix.plugin.getConfig().getBoolean("underground.Enabled")) {
             Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
-            if (!upType.isOccluding() && !upType.equals(Material.LAVA)) return;
             World world = player.getWorld();
             int maxHeight = world.getMaxHeight();
             int minHeight = world.getMinHeight();
 
-            if (!upType.isOccluding() && !upType.equals(Material.LAVA)) {
-                return;
-            }
+            if (upType.isOccluding() || upType.equals(Material.LAVA)) {
+                for (int i = minHeight; i <= maxHeight; i++) { // Dreeam TODO: need from MaxHeight to MinHeight, to prevent teleport to cave underground
+                    joinLoc.setY(i);
+                    Block joinBlock = joinLoc.getBlock();
 
-            for (int i = minHeight; i <= maxHeight; i++) { // Dreeam TODO: need from MaxHeight to MinHeight, to prevent teleport to cave underground
-                joinLoc.setY(i);
-                Block joinBlock = joinLoc.getBlock();
+                    if ((joinBlock.getRelative(BlockFace.DOWN).getType().isBlock())
+                            && joinBlock.getType().equals(Material.AIR)
+                            && joinBlock.getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
+                        if (joinBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LAVA)) {
+                            joinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
+                        }
 
-                if ((joinBlock.getRelative(BlockFace.DOWN).getType().isBlock())
-                        && joinBlock.getType().equals(Material.AIR)
-                        && joinBlock.getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    if (joinBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LAVA)) {
-                        joinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
+                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
+                        LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.Message1")))));
+                        break;
                     }
 
-                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0.5, 0.1, 0.5));
-                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.plugin.getConfig().getString("underground.message1"))));
-                    break;
-                }
-
-                if (i == maxHeight) {
-                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0.5, 1.1, 0.5));
-                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.plugin.getConfig().getString("underground.message2"))));
+                    if (i == maxHeight) {
+                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
+                        LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.Message2")))));
+                    }
                 }
             }
-        } else if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.enabled")) {
-            if (!player.isOnGround()) { // TODO
-                LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize("You are in MidAir now.")));
+        }
+
+        if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.Enabled")) {
+            if (joinLoc.getBlock().isEmpty()) {
+                World world = player.getWorld();
+                Block highestBlock = world.getHighestBlockAt(joinLoc);
+
+                LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, highestBlock.getLocation().add(0, 0.1, 0));
+                LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("midAir.Message")))));
             }
         }
     }

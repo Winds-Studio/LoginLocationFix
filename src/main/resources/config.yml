@@ -1,13 +1,15 @@
-# LoginLocationFix v0.12
+# LoginLocationFix v1.0
 # By Meano & Dreeam
 
 portal:
-  enabled: false
-  message: "&a你在登录时卡在了地狱门, 现已修正, 如果登录后卡在别人禁止移动的领地, 请使用命令/res unstuck跳出这块领地, 其他问题在服务器交流贴或群中反馈."
+  Enabled: false
+  Message: "&a你在登录时卡在了地狱门, 现已修正, 如果登录后卡在别人禁止移动的领地, 请使用命令/res unstuck跳出这块领地, 其他问题在服务器交流贴或群中反馈."
 
 underground:
-  enabled: true
-  message1: "&a你被埋住了, 坐标已修正, 下次下线之前请小心!"
-  message2: "&a你被埋住了, 坐标无法修正, 只好送你去了最高点, 自求多福吧少年~"
+  Enabled: true
+  Message1: "&a你被埋住了, 坐标已修正, 下次下线之前请小心!"
+  Message2: "&a你被埋住了, 坐标无法修正, 只好送你去了最高点, 自求多福吧少年~"
+
 midAir:
-  enabled: false # TODO
+  Enabled: true
+  Message: "&a你诞生于天空之上, 坐标已修正, 下次下线之前请小心!"

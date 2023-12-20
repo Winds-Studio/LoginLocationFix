@@ -18,7 +18,7 @@ public final class LoginLocationFix extends JavaPlugin {
         this.adventure = BukkitAudiences.create(this);
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), this);
-        getLogger().info("LoginLocationFix 0.12,by Meano & Dreeam, Loaded.");
+        getLogger().info("LoginLocationFix 1.0,by Meano & Dreeam, Loaded.");
     }
 
     @Override

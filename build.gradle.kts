@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.meano"
-version = "0.12"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ repositories {
     }
 }
 
-val adventureVersion = "4.14.0"
+val adventureVersion = "4.15.0"
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
