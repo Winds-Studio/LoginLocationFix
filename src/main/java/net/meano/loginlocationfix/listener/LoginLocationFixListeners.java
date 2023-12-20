@@ -90,10 +90,12 @@ public class LoginLocationFixListeners implements Listener {
         if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.Enabled")) {
             if (joinLoc.getBlock().isEmpty()) {
                 World world = player.getWorld();
-                Block highestBlock = world.getHighestBlockAt(joinLoc);
+                if (world.getEnvironment() == World.Environment.NORMAL) {
+                    Block highestBlock = world.getHighestBlockAt(joinLoc);
 
-                LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, highestBlock.getLocation().add(0, 0.1, 0));
-                LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("midAir.Message")))));
+                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, highestBlock.getLocation().add(0, 0.1, 0));
+                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("midAir.Message")))));
+                }
             }
         }
     }
