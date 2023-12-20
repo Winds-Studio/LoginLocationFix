@@ -31,7 +31,7 @@ public class LoginLocationFixListeners implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location joinLoc = player.getLocation().getBlock().getLocation();
+        Location joinLoc = player.getLocation();
 
         if (LoginLocationFix.plugin.getConfig().getBoolean("portal.Enabled")) {
             if (joinLoc.getBlock().getType().equals(materialPortal) || joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
@@ -88,10 +88,12 @@ public class LoginLocationFixListeners implements Listener {
         }
 
         if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.Enabled")) {
-            if (joinLoc.getBlock().isEmpty()) {
-                World world = player.getWorld();
-                if (world.getEnvironment() == World.Environment.NORMAL) {
-                    Block highestBlock = world.getHighestBlockAt(joinLoc);
+            World world = player.getWorld();
+            if (world.getEnvironment() == World.Environment.NORMAL) {
+                Location joinBlockLoc = joinLoc.clone().add(0, -1, 0);
+                if (joinBlockLoc.getBlock().isEmpty()) {
+
+                    Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
 
                     LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, highestBlock.getLocation().add(0, 0.1, 0));
                     LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("midAir.Message")))));
