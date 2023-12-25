@@ -34,7 +34,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
     api("com.tcoded:FoliaLib:0.3.1")
-    api("net.kyori:adventure-platform-bukkit:4.3.1")
+    api("net.kyori:adventure-platform-bukkit:4.3.2")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
 }
