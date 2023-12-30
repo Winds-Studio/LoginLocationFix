@@ -18,6 +18,7 @@ public class LoginLocationFixListeners implements Listener {
 
     BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
     private static Material materialPortal = Material.matchMaterial("PORTAL");
+    private boolean isMinHeightChecked = false;
 
     static {
         if (materialPortal == null) {
@@ -28,6 +29,21 @@ public class LoginLocationFixListeners implements Listener {
         }
     }
 
+    private int getMinHeight(World world) {
+        //This keeps compatibility of 1.16.x and lower
+        if (!isMinHeightChecked) {
+            try {
+                Method getMinHeightMethod = World.class.getMethod("getMinHeight");
+                getMinHeightMethod.setAccessible(true);
+                isMinHeightChecked = true;
+                return world.getMinHeight();
+            } catch (NoSuchMethodException e) {
+                isMinHeightChecked = true;
+                return 0;
+            }
+        }
+        return world.getMinHeight();
+    }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -60,7 +76,7 @@ public class LoginLocationFixListeners implements Listener {
             Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
             World world = player.getWorld();
             int maxHeight = world.getMaxHeight();
-            int minHeight = world.getMinHeight();
+            int minHeight = getMinHeight(world);
 
             if (upType.isOccluding() || upType.equals(Material.LAVA)) {
                 for (int i = maxHeight; i >= minHeight; i--) { // Dreeam TODO: Optimize logic? maybe
