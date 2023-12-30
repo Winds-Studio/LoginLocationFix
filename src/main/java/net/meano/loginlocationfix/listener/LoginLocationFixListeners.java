@@ -32,7 +32,7 @@ public class LoginLocationFixListeners implements Listener {
         try {
             Method getMinHeightMethod = World.class.getMethod("getMinHeight");
             getMinHeightMethod.setAccessible(true);
-            minHeight = -64; // This should be changed later
+            minHeight = -64; // This should be changed before the next major update of Mojang
         } catch (NoSuchMethodException e) {
             minHeight = 0;
         }
