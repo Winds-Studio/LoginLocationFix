@@ -19,7 +19,7 @@ public class LoginLocationFixListeners implements Listener {
 
     BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
     private static Material materialPortal = Material.matchMaterial("PORTAL");
-    private boolean isMinHeightAvailable;
+    private static boolean isMinHeightAvailable;
 
     static {
         if (materialPortal == null) {
