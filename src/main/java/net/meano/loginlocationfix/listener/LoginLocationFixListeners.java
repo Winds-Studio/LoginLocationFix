@@ -104,6 +104,7 @@ public class LoginLocationFixListeners implements Listener {
             }
         }
 
+        // Dreeam TODO - need to consider if player on the mid air, and the floor is not solid block
         if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.Enabled")) {
             World world = player.getWorld();
             if (world.getEnvironment() == World.Environment.NORMAL) {
