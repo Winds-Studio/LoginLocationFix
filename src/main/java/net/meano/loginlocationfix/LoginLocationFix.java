@@ -3,22 +3,26 @@ package net.meano.loginlocationfix;
 import com.tcoded.folialib.FoliaLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.meano.loginlocationfix.listener.LoginLocationFixListeners;
+import org.bstats.bukkit.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LoginLocationFix extends JavaPlugin {
 
-    public static LoginLocationFix plugin;
+    public static LoginLocationFix instance;
     private BukkitAudiences adventure;
     public final FoliaLib foliaLib = new FoliaLib(this);
 
     @Override
     public void onEnable() {
-        plugin = this;
-        this.adventure = BukkitAudiences.create(this);
+        instance = this;
+        instance.adventure = BukkitAudiences.create(instance);
+        new Metrics(instance, 20124);
+
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), this);
-        getLogger().info("LoginLocationFix 1.1,by Meano & Dreeam, Loaded.");
+        getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), instance);
+
+        getLogger().info("LoginLocationFix " + instance.getDescription().getVersion() + ", by Meano & Dreeam, Loaded.");
     }
 
     @Override

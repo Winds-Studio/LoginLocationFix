@@ -1,10 +1,10 @@
 plugins {
     `java-library`
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
+    id("io.github.goooler.shadow") version "8.1.7" apply true
 }
 
 group = "net.meano"
-version = "1.1"
+version = "1.2"
 
 repositories {
     mavenCentral()
@@ -33,7 +33,9 @@ val adventureVersion = "4.16.0"
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 
+    implementation("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")
+
     api("net.kyori:adventure-platform-bukkit:4.3.2")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
@@ -59,7 +61,7 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
         exclude(dependency("com.tcoded.folialib:.*:.*"))
     }
     relocate("net.kyori", "net.meano.libs.kyori")
-    relocate("org.bstats", "net.meano.libs.bstats") // Dreeam TODO - Add bstats
+    relocate("org.bstats", "net.meano.libs.bstats")
     relocate("com.tcoded.folialib", "net.meano.libs.folialib")
 }
 

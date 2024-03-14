@@ -50,7 +50,7 @@ public class LoginLocationFixListeners implements Listener {
         Player player = event.getPlayer();
         Location joinLoc = player.getLocation();
 
-        if (LoginLocationFix.plugin.getConfig().getBoolean("portal.Enabled")) {
+        if (LoginLocationFix.instance.getConfig().getBoolean("portal.Enabled")) {
             if (joinLoc.getBlock().getType().equals(materialPortal) || joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
 
                 Block JoinBlock = joinLoc.getBlock();
@@ -58,7 +58,7 @@ public class LoginLocationFixListeners implements Listener {
 
                 for (BlockFace face : faces) {
                     if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
+                        LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
                         solved = true;
                         break;
                     }
@@ -69,11 +69,11 @@ public class LoginLocationFixListeners implements Listener {
                     JoinBlock.breakNaturally();
                 }
 
-                LoginLocationFix.plugin.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("portal.Message"))));
+                LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("portal.Message"))));
             }
         }
 
-        if (LoginLocationFix.plugin.getConfig().getBoolean("underground.Enabled")) {
+        if (LoginLocationFix.instance.getConfig().getBoolean("underground.Enabled")) {
             Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
             World world = player.getWorld();
             int maxHeight = world.getMaxHeight();
@@ -91,21 +91,21 @@ public class LoginLocationFixListeners implements Listener {
                             joinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                         }
 
-                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
-                        LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.Message1")))));
+                        LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
+                        LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message1")))));
                         break;
                     }
 
                     if (i == minHeight) {
-                        LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
-                        LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("underground.Message2")))));
+                        LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
+                        LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message2")))));
                     }
                 }
             }
         }
 
         // Dreeam TODO - need to consider if player on the mid air, and the floor is not solid block
-        if (LoginLocationFix.plugin.getConfig().getBoolean("midAir.Enabled")) {
+        if (LoginLocationFix.instance.getConfig().getBoolean("midAir.Enabled")) {
             World world = player.getWorld();
             if (world.getEnvironment() == World.Environment.NORMAL) {
                 Location joinBlockLoc = joinLoc.clone().add(0, -0.03, 0);
@@ -113,8 +113,8 @@ public class LoginLocationFixListeners implements Listener {
 
                     Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
 
-                    LoginLocationFix.plugin.foliaLib.getImpl().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
-                    LoginLocationFix.plugin.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.plugin.getConfig().getString("midAir.Message")))));
+                    LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
+                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("midAir.Message")))));
                 }
             }
         }
