@@ -1,10 +1,10 @@
 plugins {
     `java-library`
-    id("io.github.goooler.shadow") version "8.1.7" apply true
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 group = "net.meano"
-version = "1.2"
+version = "1.3"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ repositories {
 val adventureVersion = "4.16.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.5-R0.1-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")
