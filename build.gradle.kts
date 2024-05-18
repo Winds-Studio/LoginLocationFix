@@ -28,7 +28,7 @@ repositories {
     }
 }
 
-val adventureVersion = "4.16.0"
+val adventureVersion = "4.17.0"
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
