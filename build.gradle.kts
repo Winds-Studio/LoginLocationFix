@@ -34,7 +34,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
-    api("com.tcoded:FoliaLib:0.3.1")
+    api("com.tcoded:FoliaLib:0.4.2")
 
     api("net.kyori:adventure-platform-bukkit:4.3.3")
     api("net.kyori:adventure-api:$adventureVersion")
