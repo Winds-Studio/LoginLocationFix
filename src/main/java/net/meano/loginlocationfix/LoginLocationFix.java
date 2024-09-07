@@ -23,7 +23,8 @@ public final class LoginLocationFix extends JavaPlugin {
         new Metrics(instance, 20124);
 
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), instance);
+        getServer().getPluginManager().registerEvents(new OnJoin(), instance);
+        initHooks();
 
         LOGGER.info("LoginLocationFix {}, by Meano & Dreeam, Loaded.", instance.getDescription().getVersion());
     }
