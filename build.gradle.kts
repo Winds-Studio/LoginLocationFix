@@ -33,7 +33,7 @@ val adventureVersion = "4.17.0"
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
 
-    implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("org.bstats:bstats-bukkit:3.0.3")
     api("com.tcoded:FoliaLib:0.4.2")
 
     api("net.kyori:adventure-platform-bukkit:4.3.4")
