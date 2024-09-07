@@ -3,6 +3,7 @@ package net.meano.loginlocationfix.modules;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.meano.loginlocationfix.LoginLocationFix;
 import net.meano.loginlocationfix.utils.LevelUtil;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -84,7 +85,22 @@ public class LocationProcess {
     public static void fixOnAir(Player player, Location joinLoc) {
         if (!LoginLocationFix.instance.getConfig().getBoolean("midAir.Enabled")) return;
 
+        // Global exceptions
+
+        // Don't check if dead
+        if (player.isDead()) return;
+
+        // Don't check creative & spectator
+        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
+
+        // Don't check flying
+        if (player.isFlying() || player.isGliding()) return;
+
+        // Don't check in vehicle
+        if (player.isInsideVehicle()) return;
+
         World world = player.getWorld();
+
         if (world.getEnvironment() == World.Environment.NORMAL) {
             Location joinBlockLoc = joinLoc.clone().add(0, -0.03, 0);
             if (!player.isOnGround() && joinBlockLoc.getBlock().isEmpty()) {
