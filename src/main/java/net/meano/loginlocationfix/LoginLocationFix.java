@@ -2,7 +2,7 @@ package net.meano.loginlocationfix;
 
 import com.tcoded.folialib.FoliaLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.meano.loginlocationfix.listener.LoginLocationFixListeners;
+import net.meano.loginlocationfix.listener.OnJoin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
@@ -24,7 +24,6 @@ public final class LoginLocationFix extends JavaPlugin {
 
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new OnJoin(), instance);
-        initHooks();
 
         LOGGER.info("LoginLocationFix {}, by Meano & Dreeam, Loaded.", instance.getDescription().getVersion());
     }
