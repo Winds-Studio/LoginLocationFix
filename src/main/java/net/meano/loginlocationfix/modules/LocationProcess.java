@@ -52,7 +52,7 @@ public class LocationProcess {
 
             for (BlockFace face : faces) {
                 if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
+                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
                     solved = true;
                     break;
                 }
@@ -87,13 +87,13 @@ public class LocationProcess {
                         joinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
                     }
 
-                    LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
+                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
                     LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message1")))));
                     break;
                 }
 
                 if (i == minHeight) {
-                    LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
+                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
                     LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message2")))));
                 }
             }
@@ -110,7 +110,7 @@ public class LocationProcess {
 
                 Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
 
-                LoginLocationFix.instance.foliaLib.getImpl().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
+                LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
                 LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("midAir.Message")))));
             }
         }
