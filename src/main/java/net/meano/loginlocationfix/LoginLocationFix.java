@@ -3,6 +3,8 @@ package net.meano.loginlocationfix;
 import com.tcoded.folialib.FoliaLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.meano.loginlocationfix.listener.LoginLocationFixListeners;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class LoginLocationFix extends JavaPlugin {
 
     public static LoginLocationFix instance;
+    public static final Logger LOGGER = LogManager.getLogger(LoginLocationFix.class.getSimpleName());
     private BukkitAudiences adventure;
     public final FoliaLib foliaLib = new FoliaLib(this);
 
@@ -22,7 +25,7 @@ public final class LoginLocationFix extends JavaPlugin {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new LoginLocationFixListeners(), instance);
 
-        getLogger().info("LoginLocationFix " + instance.getDescription().getVersion() + ", by Meano & Dreeam, Loaded.");
+        LOGGER.info("LoginLocationFix {}, by Meano & Dreeam, Loaded.", instance.getDescription().getVersion());
     }
 
     @Override
