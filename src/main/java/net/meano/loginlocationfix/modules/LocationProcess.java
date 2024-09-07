@@ -2,6 +2,7 @@ package net.meano.loginlocationfix.modules;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.meano.loginlocationfix.LoginLocationFix;
+import net.meano.loginlocationfix.utils.LevelUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,14 +10,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
-import java.util.Objects;
-
 public class LocationProcess {
 
     private static final BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
     private static Material materialPortal = Material.matchMaterial("PORTAL");
-    private static boolean isMinHeightAvailable;
 
     static {
         if (materialPortal == null) {
@@ -24,22 +21,6 @@ public class LocationProcess {
             if (materialPortal == null) {
                 materialPortal = Material.matchMaterial("NETHER_PORTAL");
             }
-        }
-
-        try {
-            Method getMinHeightMethod = World.class.getMethod("getMinHeight");
-            getMinHeightMethod.setAccessible(true);
-            isMinHeightAvailable = true;
-        } catch (NoSuchMethodException e) {
-            isMinHeightAvailable = false;
-        }
-    }
-
-    private static int getMinHeight(World world) {
-        if (isMinHeightAvailable) {
-            return world.getMinHeight();
-        } else {
-            return 0;
         }
     }
 
@@ -63,7 +44,7 @@ public class LocationProcess {
                 JoinBlock.breakNaturally();
             }
 
-            LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("portal.Message"))));
+            LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("portal.Message")));
         }
     }
 
@@ -73,7 +54,7 @@ public class LocationProcess {
         Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
         World world = player.getWorld();
         int maxHeight = world.getMaxHeight();
-        int minHeight = getMinHeight(world);
+        int minHeight = LevelUtil.getMinHeight(world);
 
         if (upType.isOccluding() || upType.equals(Material.LAVA)) {
             for (int i = maxHeight; i >= minHeight; i--) { // Dreeam TODO: Optimize logic? maybe
@@ -88,13 +69,13 @@ public class LocationProcess {
                     }
 
                     LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message1")))));
+                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message1"))));
                     break;
                 }
 
                 if (i == minHeight) {
                     LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("underground.Message2")))));
+                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message2"))));
                 }
             }
         }
@@ -111,7 +92,7 @@ public class LocationProcess {
                 Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
 
                 LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
-                LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Objects.requireNonNull(LoginLocationFix.instance.getConfig().getString("midAir.Message")))));
+                LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("midAir.Message"))));
             }
         }
     }
