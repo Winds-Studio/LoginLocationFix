@@ -34,7 +34,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
 
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.0")
-    implementation("org.bstats:bstats-bukkit:3.0.3")
+    implementation("org.bstats:bstats-bukkit:3.1.0")
     api("com.tcoded:FoliaLib:0.4.2")
 
     api("net.kyori:adventure-platform-bukkit:4.3.4")
