@@ -37,7 +37,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.1.0")
     api("com.tcoded:FoliaLib:0.4.2")
 
-    api("net.kyori:adventure-platform-bukkit:4.3.4")
+    api("net.kyori:adventure-platform-bukkit:4.4.0")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
 }
