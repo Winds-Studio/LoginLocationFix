@@ -3,113 +3,143 @@ package net.meano.loginlocationfix.modules;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.meano.loginlocationfix.LoginLocationFix;
 import net.meano.loginlocationfix.utils.LevelUtil;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-public class LocationProcess {
+public final class LocationProcess {
+    private static final BlockFace[] ADJACENT_FACES = {
+        BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH,
+        BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST
+    };
+    
+    private static final Material PORTAL_MATERIAL = findPortalMaterial();
+    private static final double TELEPORT_Y_OFFSET = 0.1;
+    private static final double AIR_CHECK_OFFSET = -0.03;
 
-    private static final BlockFace[] faces = {BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST};
-    private static Material materialPortal = Material.matchMaterial("PORTAL");
-
-    static {
-        if (materialPortal == null) {
-            materialPortal = Material.matchMaterial("PORTAL_BLOCK");
-            if (materialPortal == null) {
-                materialPortal = Material.matchMaterial("NETHER_PORTAL");
+    private static Material findPortalMaterial() {
+        Material material = Material.matchMaterial("PORTAL");
+        if (material == null) {
+            material = Material.matchMaterial("PORTAL_BLOCK");
+            if (material == null) {
+                material = Material.matchMaterial("NETHER_PORTAL");
             }
         }
+        return material;
     }
 
+    private LocationProcess() {} // Utility class
+
     public static void fixStuckInPortal(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("portal.Enabled")) return;
+        LoginLocationFix plugin = LoginLocationFix.instance;
+        if (!plugin.getConfig().getBoolean("portal.Enabled")) return;
 
-        if (joinLoc.getBlock().getType().equals(materialPortal) || joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
-            Block JoinBlock = joinLoc.getBlock();
-            boolean solved = false;
-
-            for (BlockFace face : faces) {
-                if (JoinBlock.getRelative(face).getType().equals(Material.AIR) && JoinBlock.getRelative(face).getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, JoinBlock.getRelative(face).getLocation().add(0.5, 0.1, 0.5));
-                    solved = true;
-                    break;
-                }
-            }
-
-            if (!solved) {
-                JoinBlock.getRelative(BlockFace.UP).breakNaturally();
-                JoinBlock.breakNaturally();
-            }
-
-            LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("portal.Message")));
+        Block joinBlock = joinLoc.getBlock();
+        if (!isPortalBlock(joinBlock) && !isPortalBlock(joinBlock.getRelative(BlockFace.UP))) {
+            return;
         }
+
+        for (BlockFace face : ADJACENT_FACES) {
+            Block adjacent = joinBlock.getRelative(face);
+            if (isSafeTeleportSpot(adjacent)) {
+                plugin.foliaLib.getScheduler().teleportAsync(player, 
+                    adjacent.getLocation().add(0.5, TELEPORT_Y_OFFSET, 0.5));
+                sendMessage(player, "portal.Message");
+                return;
+            }
+        }
+
+        // No safe spot found, break portal blocks
+        joinBlock.getRelative(BlockFace.UP).breakNaturally();
+        joinBlock.breakNaturally();
+        sendMessage(player, "portal.Message");
     }
 
     public static void fixStuckUnderground(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("underground.Enabled")) return;
+        LoginLocationFix plugin = LoginLocationFix.instance;
+        if (!plugin.getConfig().getBoolean("underground.Enabled")) return;
 
         Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
+        if (!upType.isOccluding() && upType != Material.LAVA) return;
+
         World world = player.getWorld();
+        Location tempLoc = joinLoc.clone();
         int maxHeight = world.getMaxHeight();
         int minHeight = LevelUtil.getMinHeight(world);
 
-        if (upType.isOccluding() || upType.equals(Material.LAVA)) {
-            for (int i = maxHeight; i >= minHeight; i--) { // Dreeam TODO: Optimize logic? maybe
-                joinLoc.setY(i);
-                Block joinBlock = joinLoc.getBlock();
+        for (int y = maxHeight; y >= minHeight; y--) {
+            tempLoc.setY(y);
+            Block block = tempLoc.getBlock();
+            Block blockBelow = block.getRelative(BlockFace.DOWN);
 
-                if ((joinBlock.getRelative(BlockFace.DOWN).getType().isBlock())
-                        && joinBlock.getType().equals(Material.AIR)
-                        && joinBlock.getRelative(BlockFace.UP).getType().equals(Material.AIR)) {
-                    if (joinBlock.getRelative(BlockFace.DOWN).getType().equals(Material.LAVA)) {
-                        joinBlock.getRelative(BlockFace.DOWN).setType(Material.DIRT);
-                    }
-
-                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message1"))));
-                    break;
+            if (isSafeUndergroundSpot(block, blockBelow)) {
+                if (blockBelow.getType() == Material.LAVA) {
+                    blockBelow.setType(Material.DIRT);
                 }
+                plugin.foliaLib.getScheduler().teleportAsync(player, 
+                    block.getLocation().add(0, TELEPORT_Y_OFFSET, 0));
+                sendMessage(player, "underground.Message1");
+                return;
+            }
 
-                if (i == minHeight) {
-                    LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message2"))));
-                }
+            if (y == minHeight) {
+                plugin.foliaLib.getScheduler().teleportAsync(player,
+                    tempLoc.setY(maxHeight + TELEPORT_Y_OFFSET));
+                sendMessage(player, "underground.Message2");
             }
         }
     }
 
     public static void fixOnAir(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("midAir.Enabled")) return;
+        LoginLocationFix plugin = LoginLocationFix.instance;
+        if (!plugin.getConfig().getBoolean("midAir.Enabled") 
+            || shouldSkipAirCheck(player) 
+            || player.getWorld().getEnvironment() != World.Environment.NORMAL) {
+            return;
+        }
 
-        // Global exceptions
+        Location joinBlockLoc = joinLoc.clone().add(0, AIR_CHECK_OFFSET, 0);
+        if (player.isOnGround() || !joinBlockLoc.getBlock().isEmpty()) {
+            return;
+        }
 
-        // Don't check if dead
-        if (player.isDead()) return;
+        Block highestBlock = joinLoc.getWorld().getHighestBlockAt(joinBlockLoc);
+        plugin.foliaLib.getScheduler().teleportAsync(player,
+            new Location(joinLoc.getWorld(), joinLoc.getX(), 
+                highestBlock.getY() + 1.1, joinLoc.getZ()));
+        sendMessage(player, "midAir.Message");
+    }
 
-        // Don't check creative & spectator
-        if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
+    private static boolean isPortalBlock(Block block) {
+        return block.getType() == PORTAL_MATERIAL;
+    }
 
-        // Don't check flying
-        if (player.isFlying() || player.isGliding()) return;
+    private static boolean isSafeTeleportSpot(Block block) {
+        return block.getType() == Material.AIR 
+            && block.getRelative(BlockFace.UP).getType() == Material.AIR;
+    }
 
-        // Don't check in vehicle
-        if (player.isInsideVehicle()) return;
+    private static boolean isSafeUndergroundSpot(Block block, Block blockBelow) {
+        return blockBelow.getType().isBlock()
+            && block.getType() == Material.AIR
+            && block.getRelative(BlockFace.UP).getType() == Material.AIR;
+    }
 
-        World world = player.getWorld();
+    private static boolean shouldSkipAirCheck(Player player) {
+        return player.isDead()
+            || player.getGameMode() == GameMode.CREATIVE 
+            || player.getGameMode() == GameMode.SPECTATOR
+            || player.isFlying() 
+            || player.isGliding()
+            || player.isInsideVehicle();
+    }
 
-        if (world.getEnvironment() == World.Environment.NORMAL) {
-            Location joinBlockLoc = joinLoc.clone().add(0, -0.03, 0);
-            if (!player.isOnGround() && joinBlockLoc.getBlock().isEmpty()) {
-
-                Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
-
-                LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
-                LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("midAir.Message"))));
-            }
+    private static void sendMessage(Player player, String configPath) {
+        String message = LoginLocationFix.instance.getConfig().getString(configPath);
+        if (message != null) {
+            LoginLocationFix.instance.adventure().player(player)
+                .sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
         }
     }
 }
