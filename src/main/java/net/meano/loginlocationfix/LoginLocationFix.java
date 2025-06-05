@@ -6,40 +6,68 @@ import net.meano.loginlocationfix.listener.OnJoin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class LoginLocationFix extends JavaPlugin {
-
-    public static LoginLocationFix instance;
-    public static final Logger LOGGER = LogManager.getLogger(LoginLocationFix.class.getSimpleName());
+    private static final int BSTATS_ID = 20124;
+    private static LoginLocationFix instance;
+    private static final Logger LOGGER = LogManager.getLogger(LoginLocationFix.class);
+    
     private BukkitAudiences adventure;
-    public final FoliaLib foliaLib = new FoliaLib(this);
+    private final FoliaLib foliaLib = new FoliaLib(this);
 
     @Override
     public void onEnable() {
         instance = this;
-        instance.adventure = BukkitAudiences.create(instance);
-        new Metrics(instance, 20124);
-
+        initializeAdventure();
+        initializeMetrics();
+        registerListeners();
+        
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new OnJoin(), instance);
-
-        LOGGER.info("LoginLocationFix {}, by Meano & Dreeam, Loaded.", instance.getDescription().getVersion());
+        logStartupMessage();
     }
 
     @Override
     public void onDisable() {
-        if (this.adventure != null) {
-            this.adventure.close();
-            this.adventure = null;
-        }
+        cleanupAdventure();
+    }
+
+    public static LoginLocationFix getInstance() {
+        return instance;
     }
 
     public @NotNull BukkitAudiences adventure() {
         if (this.adventure == null) {
-            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+            throw new IllegalStateException("Cannot access Adventure when the plugin is disabled!");
         }
         return this.adventure;
+    }
+
+    public FoliaLib getFoliaLib() {
+        return foliaLib;
+    }
+
+    private void initializeAdventure() {
+        this.adventure = BukkitAudiences.create(this);
+    }
+
+    private void initializeMetrics() {
+        new Metrics(this, BSTATS_ID);
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new OnJoin(), this);
+    }
+
+    private void logStartupMessage() {
+        LOGGER.info("LoginLocationFix {}, by Meano & Dreeam, has been enabled!", getDescription().getVersion());
+    }
+
+    private void cleanupAdventure() {
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 }
