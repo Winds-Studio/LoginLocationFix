@@ -31,7 +31,7 @@ repositories {
 val adventureVersion = "4.23.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21.6-R0.1-SNAPSHOT")
 
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
     implementation("org.bstats:bstats-bukkit:3.1.0")
