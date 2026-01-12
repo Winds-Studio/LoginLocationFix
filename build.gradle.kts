@@ -42,34 +42,36 @@ dependencies {
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-}
-
-configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.build.configure {
-    dependsOn("shadowJar")
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveFileName = "${project.name}-${project.version}.${archiveExtension.get()}"
-    exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
-    minimize {
-        exclude(dependency("com.tcoded.folialib:.*:.*"))
-    }
-    relocate("net.kyori", "net.meano.libs.kyori")
-    relocate("org.bstats", "net.meano.libs.bstats")
-    relocate("com.tcoded.folialib", "net.meano.libs.folialib")
-}
-
 tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+
+    configure<JavaPluginExtension> {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    build.configure {
+        dependsOn(shadowJar)
+    }
+
+    shadowJar {
+        archiveFileName = "${project.name}-${project.version}.${archiveExtension.get()}"
+        exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
+        minimize {
+            exclude(dependency("com.tcoded.folialib:.*:.*"))
+        }
+        relocate("net.kyori", "net.meano.libs.kyori")
+        relocate("org.bstats", "net.meano.libs.bstats")
+        relocate("com.tcoded.folialib", "net.meano.libs.folialib")
+    }
+
     processResources {
         filesMatching("**/plugin.yml") {
-            expand("version" to project.version)
+            expand(
+                "version" to project.version
+            )
         }
     }
 }
