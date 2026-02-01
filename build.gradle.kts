@@ -24,8 +24,8 @@ repositories {
 
     // FoliaLib
     maven {
-        name = "devmart-other"
-        url = uri("https://nexuslite.gcnt.net/repos/other/")
+        name = "tcoded-releases"
+        url = uri("https://repo.tcoded.com/releases")
     }
 }
 
@@ -36,7 +36,7 @@ dependencies {
 
     compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
     implementation("org.bstats:bstats-bukkit:3.1.0")
-    api("com.tcoded:FoliaLib:0.4.3")
+    api("com.tcoded:FoliaLib:0.5.1")
 
     api("net.kyori:adventure-platform-bukkit:4.4.1")
     api("net.kyori:adventure-api:$adventureVersion")
@@ -63,9 +63,9 @@ tasks {
         minimize {
             exclude(dependency("com.tcoded.folialib:.*:.*"))
         }
-        relocate("net.kyori", "net.meano.libs.kyori")
-        relocate("org.bstats", "net.meano.libs.bstats")
-        relocate("com.tcoded.folialib", "net.meano.libs.folialib")
+        relocate("net.kyori", "${project.group}.libs.kyori")
+        relocate("org.bstats", "${project.group}.libs.bstats")
+        relocate("com.tcoded.folialib", "${project.group}.libs.folialib")
     }
 
     processResources {
