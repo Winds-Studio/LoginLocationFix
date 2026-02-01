@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.meano"
-version = "1.4"
+version = "1.5"
 description = "Fix player location when they login, prevent stuck in blocks"
 
 repositories {
