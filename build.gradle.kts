@@ -5,6 +5,7 @@ plugins {
 
 group = "net.meano"
 version = "1.4"
+description = "Fix player location when they login, prevent stuck in blocks"
 
 repositories {
     mavenCentral()
@@ -35,7 +36,7 @@ dependencies {
 
     compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
     implementation("org.bstats:bstats-bukkit:3.1.0")
-    api("com.tcoded:FoliaLib:0.4.2")
+    api("com.tcoded:FoliaLib:0.4.3")
 
     api("net.kyori:adventure-platform-bukkit:4.4.1")
     api("net.kyori:adventure-api:$adventureVersion")
@@ -52,12 +53,12 @@ tasks {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    build.configure {
+    build {
         dependsOn(shadowJar)
     }
 
     shadowJar {
-        archiveFileName = "${project.name}-${project.version}.${archiveExtension.get()}"
+        archiveFileName.set("${project.name}-${project.version}.${archiveExtension.get()}")
         exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
         minimize {
             exclude(dependency("com.tcoded.folialib:.*:.*"))
@@ -70,7 +71,10 @@ tasks {
     processResources {
         filesMatching("**/plugin.yml") {
             expand(
-                "version" to project.version
+                mapOf(
+                    "version" to project.version,
+                    "description" to description
+                )
             )
         }
     }
