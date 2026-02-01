@@ -2,6 +2,7 @@ package net.meano.loginlocationfix.modules;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.meano.loginlocationfix.LoginLocationFix;
+import net.meano.loginlocationfix.config.Config;
 import net.meano.loginlocationfix.utils.LevelUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -26,7 +27,7 @@ public class LocationProcess {
     }
 
     public static void fixStuckInPortal(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("portal.Enabled")) return;
+        if (!Config.portalFixEnabled) return;
 
         if (joinLoc.getBlock().getType().equals(materialPortal) || joinLoc.getBlock().getRelative(BlockFace.UP).getType().equals(materialPortal)) {
             Block JoinBlock = joinLoc.getBlock();
@@ -45,12 +46,12 @@ public class LocationProcess {
                 JoinBlock.breakNaturally();
             }
 
-            LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("portal.Message")));
+            LoginLocationFix.instance.adventure().player(player).sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Config.portalFixMsg));
         }
     }
 
     public static void fixStuckUnderground(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("underground.Enabled")) return;
+        if (!Config.undergroundFixEnabled) return;
 
         Material upType = joinLoc.getBlock().getRelative(BlockFace.UP).getType();
         World world = player.getWorld();
@@ -70,20 +71,20 @@ public class LocationProcess {
                     }
 
                     LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message1"))));
+                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Config.undergroundFixMsg1)));
                     break;
                 }
 
                 if (i == minHeight) {
                     LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, joinBlock.getLocation().add(0, maxHeight + 0.1, 0));
-                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("underground.Message2"))));
+                    LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Config.undergroundFixMsg2)));
                 }
             }
         }
     }
 
     public static void fixOnAir(Player player, Location joinLoc) {
-        if (!LoginLocationFix.instance.getConfig().getBoolean("midAir.Enabled")) return;
+        if (!Config.midAirFixEnabled) return;
 
         // Global exceptions
 
@@ -108,7 +109,7 @@ public class LocationProcess {
                 Block highestBlock = world.getHighestBlockAt(joinBlockLoc);
 
                 LoginLocationFix.instance.foliaLib.getScheduler().teleportAsync(player, new Location(world, joinLoc.getX(), highestBlock.getLocation().getY() + 1.1, joinLoc.getZ()));
-                LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(LoginLocationFix.instance.getConfig().getString("midAir.Message"))));
+                LoginLocationFix.instance.adventure().player(player).sendMessage((LegacyComponentSerializer.legacyAmpersand().deserialize(Config.midAirFixMsg)));
             }
         }
     }
