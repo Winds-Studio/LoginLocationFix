@@ -34,7 +34,7 @@ val adventureVersion = "4.26.1"
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21.11-R0.2-SNAPSHOT")
 
-    compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.25.4")
     implementation("org.bstats:bstats-bukkit:3.2.1")
     api("com.tcoded:FoliaLib:0.5.1")
 
