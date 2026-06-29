@@ -29,7 +29,7 @@ repositories {
     }
 }
 
-val adventureVersion = "5.1.1"
+val adventureVersion = "5.2.0"
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:26.1-R0.1-SNAPSHOT")
