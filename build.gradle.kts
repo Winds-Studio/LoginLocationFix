@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "9.5.0"
+    id("com.gradleup.shadow") version "9.5.1"
 }
 
 group = "net.meano"
